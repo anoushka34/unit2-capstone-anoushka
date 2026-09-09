@@ -1,0 +1,12 @@
+.venv/
+venv/
+ENV/
+
+.env 
+
+__pycache__?
+*.pyc
+.pytest_cache/
+
+enterprise.db
+chroma_db/
