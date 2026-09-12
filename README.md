@@ -208,7 +208,52 @@ Total system cost: $0.000047
 Most tokens used by: Manager (673 tokens)
 ```
 
-## Challenges
+### Query 8 — Hybrid (individual run)
+
+**Query:** *"Which movies in our database satisfy both the policy runtime criteria and the 8.5 IMDb rating threshold?"*
+
+```
+[Manager] tokens: in=207 out=61 cost=$0.000008
+[Qualitative] tokens: in=125 out=30 cost=$0.000005
+[Quantitative] tokens: in=164 out=26 cost=$0.000005
+[Quantitative] tokens: in=165 out=97 cost=$0.000010
+[Manager] tokens: in=222 out=362 cost=$0.000031
+
+ROUTE: HYBRID
+```
+
+**Answer:** Three films satisfy both the 120-minute runtime minimum and the 8.5 IMDb rating threshold: *The Shawshank Redemption* (9.3, 142 min), *The Godfather* (9.2, 175 min), and *The Dark Knight* (9.0, 152 min).
+
+### Query 10 — Hybrid (individual run)
+
+**Query:** *"Are there any movies directed by Francis Ford Coppola that qualify for an FYC campaign based on runtime and rating?"*
+
+```
+[Manager] tokens: in=208 out=74 cost=$0.000009
+[Qualitative] tokens: in=123 out=95 cost=$0.000009
+[Quantitative] tokens: in=241 out=34 cost=$0.000007
+[Quantitative] tokens: in=219 out=44 cost=$0.000007
+[Manager] tokens: in=244 out=260 cost=$0.000024
+
+ROUTE: HYBRID
+```
+
+**Answer:** *The Godfather* (9.2 rating, 175 min) is the only Coppola film in the database meeting both the rating and runtime criteria for FYC campaign eligibility.
+
+## Final Combined Tokenomics Summary (All 10 Queries)
+
+Totals below are aggregated by hand across all sessions, since the daily free-tier quota required the 10 queries to be split across multiple runs rather than one continuous `--benchmark` session.
+
+| Agent | Total Tokens | Total Cost |
+|---|---|---|
+| Manager | 4,677 | $0.000183 |
+| Qualitative | 1,575 | $0.000054 |
+| Quantitative | 2,801 | $0.000081 |
+| **Grand Total** | **9,053** | **$0.000318** |
+
+**Most tokens consumed by:** Manager — expected, since every query (qualitative, quantitative, or hybrid) pays a Manager routing call up front, and hybrid queries additionally pay for a Manager synthesis call at the end.
+
+
 
 The Gemini free tier enforces a hard daily cap (20 requests/day for `gemini-3.6-flash` in this project's configuration) in addition to a per-minute cap. A single hybrid query costs 4-5 Gemini calls (routing, qualitative retrieval, SQL generation, result summarization, and final synthesis), so a full 10-query benchmark — combining qualitative, quantitative, and hybrid queries — exceeds the daily quota in one sitting. To manage this:
 
