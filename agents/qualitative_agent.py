@@ -7,7 +7,7 @@ from google import genai
 import chromadb
 from chromadb.utils import embedding_functions
 from tokens import log_usage
-
+from api_utils import safe_generate
 load_dotenv()
 
 #retrieve the API key from the env file
@@ -91,7 +91,8 @@ def run_qualitative_agent(query: str) -> dict:
     prompt = f"Context:\n{context}\n\nUser Question:\n{query}"
 
     #return the response by calling the gemini model
-    response = client.models.generate_content(
+    response = safe_generate(
+        client,
         model="gemini-3.6-flash",
         contents=prompt,
         config={"system_instruction": system_instruction}

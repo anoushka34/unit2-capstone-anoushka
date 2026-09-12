@@ -33,8 +33,8 @@ def run_benchmark():
         print(f"Answer Summary: {result.get('answer')[:120]}...\n" + "-" * 40)
 
         if idx < len(BENCHMARK_QUERIES):
-            print("sleeping for 30s for rate limits")
-            time.sleep(30)
+            print("sleeping for 45s for rate limits")
+            time.sleep(45)
 
     # Print the aggregate tokenomics summary required by the rubric
     display_output()

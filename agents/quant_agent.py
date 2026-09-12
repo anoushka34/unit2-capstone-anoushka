@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from google import genai
 from agents.validate import validate_sql
 from tokens import log_usage
-
+from api_utils import safe_generate
 load_dotenv()
 
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
@@ -42,7 +42,8 @@ def run_quantitative_agent(query: str) -> dict:
    #convert what the user entered into the sql query
     sql_prompt = f"{SCHEMA_PROMPT}\nUser Request: {query}\nSQL Query:"
    
-    response = client.models.generate_content(
+    response = safe_generate(
+        client,
         model="gemini-3.6-flash",
         contents=sql_prompt
     )
@@ -89,7 +90,8 @@ def run_quantitative_agent(query: str) -> dict:
         "Provide a concise, direct answer based purely on this data."
     )
 
-    summary_response = client.models.generate_content(
+    summary_response = safe_generate(
+        client,
         model="gemini-3.6-flash",
         contents=summary_prompt
     )

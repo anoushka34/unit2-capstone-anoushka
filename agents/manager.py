@@ -6,6 +6,7 @@ from google import genai
 from agents.qualitative_agent import run_qualitative_agent
 from agents.quant_agent import run_quantitative_agent
 from tokens import log_usage
+from api_utils import safe_generate
 
 load_dotenv()
 
@@ -40,7 +41,8 @@ def run_manager(user_query: str) -> dict:
     """
     #this is teling gemini which route to choose based on the user query
     routing_prompt = f"{ROUTER_PROMPT}\nUser Request: {user_query}\nJSON Response:"
-    route_response = client.models.generate_content(
+    route_response = safe_generate(
+        client,
         model="gemini-3.6-flash",
         contents=routing_prompt
     )
@@ -88,10 +90,11 @@ def run_manager(user_query: str) -> dict:
         "explicitly stating how the policy standards align with or compare to the database figures."
     )
 
-    synthesis_response = client.models.generate_content(
+    synthesis_response = safe_generate(
+        client,
         model="gemini-3.6-flash",
         contents=synthesis_prompt
-    )
+    )   
 
     in_tokens_syn = synthesis_response.usage_metadata.prompt_token_count
     out_tokens_syn = synthesis_response.usage_metadata.candidates_token_count
