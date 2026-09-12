@@ -5,6 +5,8 @@ COST_PER_1K_OUTPUT = 0.000075
 usage = []
 
 def log_usage(agent_name: str, input_tokens: int, output_tokens: int):
+    input_tokens = input_tokens or 0
+    output_tokens = output_tokens or 0
     cost = (input_tokens / 1000 * COST_PER_1K_INPUT) + (output_tokens / 1000 * COST_PER_1K_OUTPUT)
     print(f"[{agent_name}] tokens: in={input_tokens} out={output_tokens} cost=${cost:.6f}")
 
@@ -40,9 +42,9 @@ def display_output():
         c += i["cost"]
 
 
-    print("Total token summary")
+    print("\n---TOKENOMICS SUMMARY---")
     for i, j in total.items():
-        print(f"Agent: {a} | Total tokens: {j['tokens']} | Cost: ${j['cost']:.6f}")
+        print(f"Agent: {i} | Total tokens: {j['tokens']} | Cost: ${j['cost']:.6f}")
 
     highest_agent = max(total.items(), key=lambda x: x[1]["tokens"])
 
